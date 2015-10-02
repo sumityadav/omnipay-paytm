@@ -1,0 +1,30 @@
+{
+    "name": "sumityadav/omnipay-paytm",
+    "type": "library",
+    "description": "PayTm driver for the Omnipay payment processing library",
+    "keywords": [
+        "paytm",
+        "gateway",
+        "merchant",
+        "omnipay",
+        "pay",
+        "payment"
+    ],
+    "homepage": "https://github.com/sumityadav/omnipay-paytm",
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Sumit Kumar",
+            "email": "sumi.yadav@gmail.com"
+        }
+    ],
+    "autoload": {
+        "psr-4": { "Omnipay\\Paytm\\" : "src/" }
+    },
+    "require": {
+        "omnipay/common": "~2.0"
+    },
+    "require-dev": {
+        "omnipay/tests": "~2.0"
+    }
+}
