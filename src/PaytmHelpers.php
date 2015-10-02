@@ -10,15 +10,15 @@ trait PaytmHelpers
             ksort($arrayList);
         }
         $str = $this->getArray2Str($arrayList);
-        $salt = $this->generateSalt_e(4);
+        $salt = $this->generateEncryptedString(4);
         $finalString = $str . "|" . $salt;
         $hash = hash("sha256", $finalString);
         $hashString = $hash . $salt;
-        $checksum = $this->encrypt_e($hashString, $key);
+        $checksum = $this->encryptString($hashString, $key);
         return $checksum;
     }
 
-    public function generateSalt_e($length)
+    public function generateEncryptedString($length)
     {
         $random = "";
         srand((double) microtime() * 1000000);
@@ -40,16 +40,16 @@ trait PaytmHelpers
         $flag = 1;
         foreach ($arrayList as $key => $value) {
             if ($flag) {
-                $paramStr .= $this->checkString_e($value);
+                $paramStr .= $this->trimString($value);
                 $flag = 0;
             } else {
-                $paramStr .= "|" . $this->checkString_e($value);
+                $paramStr .= "|" . $this->trimString($value);
             }
         }
         return $paramStr;
     }
 
-    public function checkString_e($value)
+    public function trimString($value)
     {
         $myvalue = ltrim($value);
         $myvalue = rtrim($myvalue);
@@ -59,11 +59,11 @@ trait PaytmHelpers
         return $myvalue;
     }
 
-    public function encrypt_e($input, $ky)
+    public function encryptString($input, $ky)
     {
         $key = $ky;
         $size = mcrypt_get_block_size(MCRYPT_RIJNDAEL_128, 'cbc');
-        $input = $this->pkcs5_pad_e($input, $size);
+        $input = $this->PKCS5Padding($input, $size);
         $td = mcrypt_module_open(MCRYPT_RIJNDAEL_128, '', 'cbc', '');
         $iv = "@@@@&&&&####$$$$";
         mcrypt_generic_init($td, $key, $iv);
@@ -74,7 +74,7 @@ trait PaytmHelpers
         return $data;
     }
 
-    public function decrypt_e($crypt, $ky)
+    public function decryptString($crypt, $ky)
     {
         $crypt = base64_decode($crypt);
         $key = $ky;
@@ -84,18 +84,18 @@ trait PaytmHelpers
         $decrypted_data = mdecrypt_generic($td, $crypt);
         mcrypt_generic_deinit($td);
         mcrypt_module_close($td);
-        $decrypted_data = $this->pkcs5_unpad_e($decrypted_data);
+        $decrypted_data = $this->PKCS5UnPadding($decrypted_data);
         $decrypted_data = rtrim($decrypted_data);
         return $decrypted_data;
     }
 
-    public function pkcs5_pad_e($text, $blocksize)
+    public function PKCS5Padding($text, $blocksize)
     {
         $pad = $blocksize - (strlen($text) % $blocksize);
         return $text . str_repeat(chr($pad), $pad);
     }
 
-    public function pkcs5_unpad_e($text)
+    public function PKCS5UnPadding($text)
     {
         $pad = ord($text{strlen($text) - 1});
         if ($pad > strlen($text)) {
