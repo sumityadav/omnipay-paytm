@@ -1,34 +1,42 @@
 <?php
 
-namespace Omnipay\Paytm;
+namespace Omnipay\Paytm\Message;
 
-use Omnipay\Common\AbstractGateway;
+use Omnipay\Common\Message\AbstractRequest;
+use Omnipay\Paytm\PaytmHelpers;
 
 /**
- * Paytm Gateway
- *
- * @link http://paywithpaytm.com/developer.html
+ * Paytm Purchase Request
  */
-class Gateway extends AbstractGateway
+class PurchaseRequest extends AbstractRequest
 {
-    public function getName()
+    use PaytmHelpers;
+
+    protected $liveEndpoint = 'https://secure.paytm.in/oltp-web/processTransaction';
+    protected $testEndpoint = 'https://pguat.paytm.com/oltp-web/processTransaction';
+
+    public function getData()
     {
-        return 'Paytm';
+        $data['MID'] = $this->getMID();
+        $data['ORDER_ID'] = $this->getOrderId();
+        $data['CUST_ID'] = $this->getCustomerId();
+        $data['INDUSTRY_TYPE_ID'] = $this->getIndustryType();
+        $data['CHANNEL_ID'] = $this->getChannelId();
+        $data['TXN_AMOUNT'] = $this->getTransactionAmount();
+        $data['WEBSITE'] = $this->getWebsite();
+        $checkSumHash = $this->getChecksumHash($data);
+        $data['CHECKSUMHASH'] = $checkSumHash;
+        return $data;
     }
 
-    public function getDefaultParameters()
+    public function sendData($data)
     {
-        return array(
-            'MID' => '',
-            'OrderId' => 'ORDS' . rand(10000, 99999999),
-            'CustomerId' => 'CUST_001',
-            'IndustryType' => 'Retail',
-            'ChannelId' => 'Web',
-            'TransactionAmount' => 10,
-            'Website' => '',
-            'MerchantKey' => '',
-            'testMode' => true,
-        );
+        return $this->response = new PurchaseResponse($this, $data);
+    }
+
+    public function getEndpoint()
+    {
+        return $this->getTestMode() ? $this->testEndpoint : $this->liveEndpoint;
     }
 
     public function getMID()
@@ -70,7 +78,6 @@ class Gateway extends AbstractGateway
     {
         return $this->setParameter('IndustryType', $value);
     }
-
     public function getChannelId()
     {
         return $this->getParameter('ChannelId');
@@ -111,8 +118,9 @@ class Gateway extends AbstractGateway
         return $this->setParameter('MerchantKey', $value);
     }
 
-    public function purchase(array $parameters = array())
+    public function getChecksumHash($data)
     {
-        return $this->createRequest('\Omnipay\Paytm\Message\PurchaseRequest', $parameters);
+        $merchantKey = $this->getParameter('MerchantKey');
+        return $this->getChecksumFromArray($data, $merchantKey);
     }
 }
