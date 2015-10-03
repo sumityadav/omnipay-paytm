@@ -23,7 +23,7 @@ class Gateway extends AbstractGateway
             'OrderId' => 'ORDS' . rand(10000, 99999999),
             'CustomerId' => 'CUST_001',
             'IndustryType' => 'Retail',
-            'ChannelId' => 'Web',
+            'ChannelId' => 'WEB',
             'TransactionAmount' => 10,
             'Website' => 'MarketplaceBeta',
             'MerchantKey' => '5HFgd9GPiwzGOkvKD53N_Vq9SKR8Mmqx',
