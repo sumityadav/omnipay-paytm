@@ -14,11 +14,13 @@ class GatewayTest extends GatewayTestCase
 
         $this->options = array(
             'amount' => '10.00',
-            'returnUrl' => 'http://localhost/paytm_response.php',
         );
     }
 
-    public function testPurchase()
+    /**
+     * @test
+     */
+    public function verify_purchase_redirects_to_payment_gateway()
     {
         $response = $this->gateway->purchase($this->options)->send();
 

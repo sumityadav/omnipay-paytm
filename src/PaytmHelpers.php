@@ -36,6 +36,37 @@ trait PaytmHelpers
     }
 
     /**
+     * Verify if the received checksum is valid.
+     *
+     * @param  array  $arrayList
+     * @param  string $key           Paytm Merchant Key
+     * @param  string $checksumvalue
+     * @return boolean               true|false
+     */
+    public function verifyChecksum($arrayList, $key, $checksumvalue)
+    {
+        if (isset($arrayList['CHECKSUM']) && !empty($arrayList['CHECKSUM'])) {
+            $checksumParam = $arrayList['CHECKSUM'];
+            unset($arrayList['CHECKSUM']);
+        }
+
+        ksort($arrayList);
+        $str = $this->getArray2Str($arrayList);
+        $paytm_hash = $this->decryptString($checksumvalue, $key);
+        $salt = substr($paytm_hash, -4);
+        $finalString = $str . "|" . $salt;
+
+        $website_hash = hash("sha256", $finalString);
+        $website_hash .= $salt;
+
+        if ($website_hash == $paytm_hash) {
+            return true;
+        } else {
+            return false;
+        }
+    }
+
+    /**
      * Trim values and return | separated string.
      *
      * @param  array $arrayList
