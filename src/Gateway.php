@@ -19,14 +19,14 @@ class Gateway extends AbstractGateway
     public function getDefaultParameters()
     {
         return array(
-            'MID' => '',
+            'MID' => 'wVhtoq05771472615938',
             'OrderId' => 'ORDS' . rand(10000, 99999999),
             'CustomerId' => 'CUST_001',
             'IndustryType' => 'Retail',
             'ChannelId' => 'Web',
             'TransactionAmount' => 10,
-            'Website' => '',
-            'MerchantKey' => '',
+            'Website' => 'MarketplaceBeta',
+            'MerchantKey' => '5HFgd9GPiwzGOkvKD53N_Vq9SKR8Mmqx',
             'testMode' => true,
         );
     }
