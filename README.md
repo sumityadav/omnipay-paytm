@@ -4,7 +4,7 @@
 
 [![Build Status](https://travis-ci.org/sumityadav/omnipay-paytm.png?branch=master)](https://travis-ci.org/sumityadav/omnipay-paytm)
 [![Latest Stable Version](https://poser.pugx.org/sumityadav/omnipay-paytm/version.png)](https://packagist.org/packages/sumityadav/omnipay-paytm)
-[![Total Downloads](https://poser.pugx.org/sumityadav/omnipay-paytm/d/total.png)](https://packagist.org/packages/sumityadav/omnipay-dummy)
+[![Total Downloads](https://poser.pugx.org/sumityadav/omnipay-paytm/d/total.png)](https://packagist.org/packages/sumityadav/omnipay-paytm)
 
 [Omnipay](https://github.com/thephpleague/omnipay) is a framework agnostic, multi-gateway payment
 processing library for PHP 5.3+. This package implements Paytm support for Omnipay.
