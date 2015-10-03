@@ -21,7 +21,7 @@ trait PaytmHelpers
      * @param  integer $sort
      * @return string             Generated checksum
      */
-    public function getChecksumFromArray(array $arrayList, $key, $sort = 1)
+    public function getChecksumFromArray($arrayList, $key, $sort = 1)
     {
         if ($sort != 0) {
             ksort($arrayList);
