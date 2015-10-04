@@ -2,6 +2,7 @@
 
 namespace Omnipay\Paytm;
 
+use Omnipay\Common\Exception\InvalidResponseException;
 use phpseclib\Crypt\Rijndael;
 
 trait PaytmHelpers
@@ -29,7 +30,7 @@ trait PaytmHelpers
         $str = $this->getArray2Str($arrayList);
         $salt = $this->generateRandomSalt(4);
         $finalString = $str . "|" . $salt;
-        $hash = hash("sha256", $finalString);
+        $hash = $this->hashString($finalString);
         $hashString = $hash . $salt;
 
         return $this->encryptString($hashString, $key);
@@ -40,30 +41,28 @@ trait PaytmHelpers
      *
      * @param  array  $arrayList
      * @param  string $key           Paytm Merchant Key
-     * @param  string $checksumvalue
      * @return boolean               true|false
      */
-    public function verifyChecksum($arrayList, $key, $checksumvalue)
+    public function verifyChecksum($arrayList, $key)
     {
-        if (isset($arrayList['CHECKSUM']) && !empty($arrayList['CHECKSUM'])) {
-            $checksumParam = $arrayList['CHECKSUM'];
-            unset($arrayList['CHECKSUM']);
+        if (isset($arrayList['CHECKSUMHASH']) && !empty($arrayList['CHECKSUMHASH'])) {
+            $checksumParam = $arrayList['CHECKSUMHASH'];
+            unset($arrayList['CHECKSUMHASH']);
+        } else {
+            throw new InvalidResponseException("Checksum hash not found.");
         }
 
         ksort($arrayList);
         $str = $this->getArray2Str($arrayList);
-        $paytm_hash = $this->decryptString($checksumvalue, $key);
+
+        $paytm_hash = $this->decryptString($checksumParam, $key);
         $salt = substr($paytm_hash, -4);
         $finalString = $str . "|" . $salt;
 
-        $website_hash = hash("sha256", $finalString);
+        $website_hash = $this->hashString($finalString);
         $website_hash .= $salt;
 
-        if ($website_hash == $paytm_hash) {
-            return true;
-        } else {
-            return false;
-        }
+        return $website_hash === $paytm_hash;
     }
 
     /**
@@ -113,6 +112,10 @@ trait PaytmHelpers
         $encryptedString = base64_decode($encryptedString);
 
         $plaintext = $cipher->decrypt($encryptedString);
+        if (!$plaintext) {
+            throw new InvalidResponseException("Invalid checksum.");
+        }
+
         return $plaintext;
     }
 
@@ -137,48 +140,13 @@ trait PaytmHelpers
     }
 
     /**
-     * Add padding to the input string for block cyphers.
+     * Hash string using the sha256 algo.
      *
-     * @deprecated 0.1.1 This function is not used and should be removed.
-     * @param string $text      Input text
-     * @param int    $blocksize Length of the block
+     * @param  string $string string to hash
+     * @return string         Hashed string
      */
-    public function PKCS5Padding($text, $blocksize)
+    protected function hashString($string)
     {
-        $pad = $blocksize - (strlen($text) % $blocksize);
-        return $text . str_repeat(chr($pad), $pad);
-    }
-
-    /**
-     * Removed the padding from the input string.
-     *
-     * @deprecated 0.1.1 This function is not used and should be removed.
-     * @param string $text Input text
-     */
-    public function PKCS5UnPadding($text)
-    {
-        $pad = ord($text{strlen($text) - 1});
-        if ($pad > strlen($text)) {
-            return false;
-        }
-
-        return substr($text, 0, -1 * $pad);
-    }
-
-    /**
-     * Trim the input string
-     *
-     * @deprecated 0.1.1 This function is not used and should be removed.
-     * @param  string $value Input string
-     * @return string        Trimmed input string.
-     */
-    public function trimString($value)
-    {
-        $myvalue = ltrim($value);
-        $myvalue = rtrim($myvalue);
-        if ($myvalue == 'null') {
-            $myvalue = '';
-        }
-        return $myvalue;
+        return hash("sha256", $string);
     }
 }
