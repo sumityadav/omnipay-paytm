@@ -5,7 +5,7 @@ namespace Omnipay\Paytm\Message;
 use Omnipay\Common\Exception\InvalidResponseException;
 
 /**
- * Paytm Complete Purchase Request
+ * Paytm Complete Purchase Request.
  */
 class CompletePurchaseRequest extends PurchaseRequest
 {
@@ -15,7 +15,7 @@ class CompletePurchaseRequest extends PurchaseRequest
         $merchantKey = $this->getParameter('MerchantKey');
 
         if (!$this->verifyChecksum($parameters, $merchantKey)) {
-            throw new InvalidResponseException("Checksum mismatch.");
+            throw new InvalidResponseException('Checksum mismatch.');
         }
 
         return $this->httpRequest->request->all();

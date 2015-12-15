@@ -5,7 +5,7 @@ namespace Omnipay\Paytm;
 use Omnipay\Common\AbstractGateway;
 
 /**
- * Paytm Gateway
+ * Paytm Gateway.
  *
  * @link http://paywithpaytm.com/developer.html
  */
@@ -18,17 +18,17 @@ class Gateway extends AbstractGateway
 
     public function getDefaultParameters()
     {
-        return array(
-            'MID' => 'wVhtoq05771472615938',
-            'OrderId' => 'ORDS' . rand(10000, 99999999),
-            'CustomerId' => 'CUST_001',
-            'IndustryType' => 'Retail',
-            'ChannelId' => 'WEB',
+        return [
+            'MID'               => 'wVhtoq05771472615938',
+            'OrderId'           => 'ORDS'.rand(10000, 99999999),
+            'CustomerId'        => 'CUST_001',
+            'IndustryType'      => 'Retail',
+            'ChannelId'         => 'WEB',
             'TransactionAmount' => 10,
-            'Website' => 'MarketplaceBeta',
-            'MerchantKey' => '5HFgd9GPiwzGOkvKD53N_Vq9SKR8Mmqx',
-            'testMode' => true,
-        );
+            'Website'           => 'MarketplaceBeta',
+            'MerchantKey'       => '5HFgd9GPiwzGOkvKD53N_Vq9SKR8Mmqx',
+            'testMode'          => true,
+        ];
     }
 
     public function getMID()
@@ -111,12 +111,12 @@ class Gateway extends AbstractGateway
         return $this->setParameter('MerchantKey', $value);
     }
 
-    public function purchase(array $parameters = array())
+    public function purchase(array $parameters = [])
     {
         return $this->createRequest('\Omnipay\Paytm\Message\PurchaseRequest', $parameters);
     }
 
-    public function completePurchase(array $parameters = array())
+    public function completePurchase(array $parameters = [])
     {
         return $this->createRequest('\Omnipay\Paytm\Message\CompletePurchaseRequest', $parameters);
     }

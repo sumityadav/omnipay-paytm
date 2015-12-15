@@ -6,7 +6,7 @@ use Omnipay\Common\Message\AbstractRequest;
 use Omnipay\Paytm\PaytmHelpers;
 
 /**
- * Paytm Purchase Request
+ * Paytm Purchase Request.
  */
 class PurchaseRequest extends AbstractRequest
 {
@@ -26,6 +26,7 @@ class PurchaseRequest extends AbstractRequest
         $data['WEBSITE'] = $this->getWebsite();
         $checkSumHash = $this->getChecksumHash($data);
         $data['CHECKSUMHASH'] = $checkSumHash;
+
         return $data;
     }
 
@@ -78,6 +79,7 @@ class PurchaseRequest extends AbstractRequest
     {
         return $this->setParameter('IndustryType', $value);
     }
+
     public function getChannelId()
     {
         return $this->getParameter('ChannelId');
@@ -121,6 +123,7 @@ class PurchaseRequest extends AbstractRequest
     public function getChecksumHash($data)
     {
         $merchantKey = $this->getParameter('MerchantKey');
+
         return $this->getChecksumFromArray($data, $merchantKey);
     }
 }
