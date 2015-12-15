@@ -6,7 +6,7 @@ use Omnipay\Common\Message\AbstractResponse;
 use Omnipay\Common\Message\RedirectResponseInterface;
 
 /**
- * Paytm Purchase Response
+ * Paytm Purchase Response.
  */
 class PurchaseResponse extends AbstractResponse implements RedirectResponseInterface
 {

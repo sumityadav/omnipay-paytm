@@ -5,14 +5,14 @@ namespace Omnipay\Paytm\Message;
 use Omnipay\Common\Message\AbstractResponse;
 
 /**
- * Paytm Complete Purchase Response
+ * Paytm Complete Purchase Response.
  */
 class CompletePurchaseResponse extends AbstractResponse
 {
     /**
      * Check if the payment was successful.
      *
-     * @return boolean Payment status.
+     * @return bool Payment status.
      */
     public function isSuccessful()
     {
@@ -32,7 +32,7 @@ class CompletePurchaseResponse extends AbstractResponse
     /**
      * Get payment amount.
      *
-     * @return double Payment amount.
+     * @return float Payment amount.
      */
     public function getAmount()
     {
@@ -50,7 +50,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get Transaction Id
+     * Get Transaction Id.
      *
      * @return int Paytm reference number.
      */
@@ -70,7 +70,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get Transaction status
+     * Get Transaction status.
      *
      * @return string Transaction Status. TXN_SUCCESS
      */
@@ -80,7 +80,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get Response code
+     * Get Response code.
      *
      * @return int Response code. (e.g.) 01
      */
@@ -90,7 +90,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get Response message
+     * Get Response message.
      *
      * @return string Response message. (e.g.) Txn Successful.
      */
@@ -100,7 +100,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get Transaction date
+     * Get Transaction date.
      *
      * @return string Transaction Date/Time YYYY-MM-DD H:i:s
      */
@@ -110,7 +110,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get gateway name
+     * Get gateway name.
      *
      * @return string Name of the gateway used. WALLET|CREDITCARD etc.
      */
@@ -120,7 +120,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get bank name
+     * Get bank name.
      *
      * @return string Bank name
      */
@@ -130,7 +130,7 @@ class CompletePurchaseResponse extends AbstractResponse
     }
 
     /**
-     * Get payment mode
+     * Get payment mode.
      *
      * @return string PPI
      */

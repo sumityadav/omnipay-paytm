@@ -8,7 +8,7 @@ use phpseclib\Crypt\Rijndael;
 trait PaytmHelpers
 {
     /**
-     * Initialization vector for the encryption algorithm
+     * Initialization vector for the encryption algorithm.
      *
      * @var string
      */
@@ -17,10 +17,11 @@ trait PaytmHelpers
     /**
      * Generate checksum of the input array.
      *
-     * @param  array   $arrayList
-     * @param  string  $key       Paytm Merchant Key
-     * @param  integer $sort
-     * @return string             Generated checksum
+     * @param array  $arrayList
+     * @param string $key       Paytm Merchant Key
+     * @param int    $sort
+     *
+     * @return string Generated checksum
      */
     public function getChecksumFromArray($arrayList, $key, $sort = 1)
     {
@@ -29,9 +30,9 @@ trait PaytmHelpers
         }
         $str = $this->getArray2Str($arrayList);
         $salt = $this->generateRandomSalt(4);
-        $finalString = $str . "|" . $salt;
+        $finalString = $str.'|'.$salt;
         $hash = $this->hashString($finalString);
-        $hashString = $hash . $salt;
+        $hashString = $hash.$salt;
 
         return $this->encryptString($hashString, $key);
     }
@@ -39,9 +40,10 @@ trait PaytmHelpers
     /**
      * Verify if the received checksum is valid.
      *
-     * @param  array  $arrayList
-     * @param  string $key           Paytm Merchant Key
-     * @return boolean               true|false
+     * @param array  $arrayList
+     * @param string $key       Paytm Merchant Key
+     *
+     * @return bool true|false
      */
     public function verifyChecksum($arrayList, $key)
     {
@@ -49,7 +51,7 @@ trait PaytmHelpers
             $checksumParam = $arrayList['CHECKSUMHASH'];
             unset($arrayList['CHECKSUMHASH']);
         } else {
-            throw new InvalidResponseException("Checksum hash not found.");
+            throw new InvalidResponseException('Checksum hash not found.');
         }
 
         ksort($arrayList);
@@ -57,7 +59,7 @@ trait PaytmHelpers
 
         $paytm_hash = $this->decryptString($checksumParam, $key);
         $salt = substr($paytm_hash, -4);
-        $finalString = $str . "|" . $salt;
+        $finalString = $str.'|'.$salt;
 
         $website_hash = $this->hashString($finalString);
         $website_hash .= $salt;
@@ -68,7 +70,8 @@ trait PaytmHelpers
     /**
      * Trim values and return | separated string.
      *
-     * @param  array $arrayList
+     * @param array $arrayList
+     *
      * @return string | Separated string
      */
     public function getArray2Str(array $arrayList)
@@ -77,15 +80,16 @@ trait PaytmHelpers
             $item = trim($arrayList[$key]);
         });
 
-        return implode("|", is_array($arrayList) ? $arrayList : array());
+        return implode('|', is_array($arrayList) ? $arrayList : []);
     }
 
     /**
-     * Encrypt the plain text using Rijndael algorithm
+     * Encrypt the plain text using Rijndael algorithm.
      *
-     * @param  string $plaintext Plain text
-     * @param  string $key       Paytm Merchant Key
-     * @return string            base64 encoded encrypted string
+     * @param string $plaintext Plain text
+     * @param string $key       Paytm Merchant Key
+     *
+     * @return string base64 encoded encrypted string
      */
     public function encryptString($plaintext, $key)
     {
@@ -94,15 +98,17 @@ trait PaytmHelpers
         $cipher->iv = $this->iv;
 
         $encryptedString = $cipher->encrypt($plaintext);
+
         return base64_encode($encryptedString);
     }
 
     /**
-     * Decrypt the encrypted string using Rijndael algorithm
+     * Decrypt the encrypted string using Rijndael algorithm.
      *
-     * @param  string $encryptedString Encrypted string
-     * @param  string $key             Paytm Merchant Key
-     * @return string                  Plain text
+     * @param string $encryptedString Encrypted string
+     * @param string $key             Paytm Merchant Key
+     *
+     * @return string Plain text
      */
     public function decryptString($encryptedString, $key)
     {
@@ -113,25 +119,26 @@ trait PaytmHelpers
 
         $plaintext = $cipher->decrypt($encryptedString);
         if (!$plaintext) {
-            throw new InvalidResponseException("Invalid checksum.");
+            throw new InvalidResponseException('Invalid checksum.');
         }
 
         return $plaintext;
     }
 
     /**
-     * Generate random sting which will be used as the salt for encryption
+     * Generate random sting which will be used as the salt for encryption.
      *
-     * @param  int    $length Length of the salt.
-     * @return string         Random string
+     * @param int $length Length of the salt.
+     *
+     * @return string Random string
      */
     public function generateRandomSalt($length)
     {
-        $data = "AbcDE123IJKLMN67QRSTUVWXYZ";
-        $data .= "aBCdefghijklmn123opq45rs67tuv89wxyz";
-        $data .= "0FGH45OP89";
+        $data = 'AbcDE123IJKLMN67QRSTUVWXYZ';
+        $data .= 'aBCdefghijklmn123opq45rs67tuv89wxyz';
+        $data .= '0FGH45OP89';
 
-        $random = "";
+        $random = '';
         for ($i = 0; $i < $length; $i++) {
             $random .= substr($data, (rand() % (strlen($data))), 1);
         }
@@ -142,11 +149,12 @@ trait PaytmHelpers
     /**
      * Hash string using the sha256 algo.
      *
-     * @param  string $string string to hash
-     * @return string         Hashed string
+     * @param string $string string to hash
+     *
+     * @return string Hashed string
      */
     protected function hashString($string)
     {
-        return hash("sha256", $string);
+        return hash('sha256', $string);
     }
 }

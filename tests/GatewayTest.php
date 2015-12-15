@@ -12,9 +12,9 @@ class GatewayTest extends GatewayTestCase
 
         $this->gateway = new Gateway($this->getHttpClient(), $this->getHttpRequest());
 
-        $this->options = array(
+        $this->options = [
             'amount' => '10.00',
-        );
+        ];
     }
 
     /**
@@ -64,7 +64,7 @@ class GatewayTest extends GatewayTestCase
      */
     public function testCompletePurchaseError()
     {
-        $this->getHttpRequest()->request->replace(array('CHECKSUMHASH' => 'Invalid checksum'));
+        $this->getHttpRequest()->request->replace(['CHECKSUMHASH' => 'Invalid checksum']);
 
         $response = $this->gateway->completePurchase($this->options)->send();
     }
@@ -93,21 +93,21 @@ class GatewayTest extends GatewayTestCase
 
     protected function getResponseStub()
     {
-        return array(
-            'MID' => 'wVhtoq05771472615938',
-            'ORDERID' => 'ORDS10625654',
-            'TXNAMOUNT' => '1.00',
-            'CURRENCY' => 'INR',
-            'TXNID' => '375265',
-            'BANKTXNID' => '118285',
-            'STATUS' => 'TXN_SUCCESS',
-            'RESPCODE' => '01',
-            'RESPMSG' => 'Txn Successful.',
-            'TXNDATE' => '2015-10-05 00:49:26.0',
-            'GATEWAYNAME' => 'WALLET',
-            'BANKNAME' => '',
-            'PAYMENTMODE' => 'PPI',
+        return [
+            'MID'          => 'wVhtoq05771472615938',
+            'ORDERID'      => 'ORDS10625654',
+            'TXNAMOUNT'    => '1.00',
+            'CURRENCY'     => 'INR',
+            'TXNID'        => '375265',
+            'BANKTXNID'    => '118285',
+            'STATUS'       => 'TXN_SUCCESS',
+            'RESPCODE'     => '01',
+            'RESPMSG'      => 'Txn Successful.',
+            'TXNDATE'      => '2015-10-05 00:49:26.0',
+            'GATEWAYNAME'  => 'WALLET',
+            'BANKNAME'     => '',
+            'PAYMENTMODE'  => 'PPI',
             'CHECKSUMHASH' => 'I1GKR2Lw11aoYm+pSnqW0M7VdRUaLUoA8xuGJQLWCOWTEVaaOs8DEZ6lTEpCDePG0pcq45F8fhO3f9k4ctBk2k8XweqDaj7XFGpnHSGi+Y8=',
-        );
+        ];
     }
 }
