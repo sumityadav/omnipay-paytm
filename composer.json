@@ -15,17 +15,17 @@
     "authors": [
         {
             "name": "Sumit Kumar",
-            "email": "sumi.yadav@gmail.com"
+            "email": "sumit@sumityadav.com"
         }
     ],
     "autoload": {
         "psr-4": { "Omnipay\\Paytm\\" : "src/" }
     },
     "require": {
-        "omnipay/common": "~2.0",
+        "omnipay/common": "^3.0",
         "phpseclib/phpseclib": "^2.0"
     },
     "require-dev": {
-        "omnipay/tests": "~2.0"
+        "omnipay/tests": "^3.0"
     }
 }

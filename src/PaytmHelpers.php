@@ -72,7 +72,7 @@ trait PaytmHelpers
      *
      * @param array $arrayList
      *
-     * @return string | Separated string
+     * @return string pipe | separated string
      */
     public function getArray2Str(array $arrayList)
     {
